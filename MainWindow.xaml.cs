@@ -11,6 +11,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
+using System.Diagnostics;
 
 namespace WpfApplication1
 {
@@ -22,6 +24,45 @@ namespace WpfApplication1
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void chooseSourceVideo(object sender, RoutedEventArgs e)
+        {
+            // See MSDN article
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.FileName = "Video"; // Default file name
+            dlg.DefaultExt = ".avi"; // Default file extension
+            dlg.Filter = "AVI Videos|*.avi"; // Filter files by extension 
+
+            // Show open file dialog box
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Process open file dialog box results 
+            if (result == true)
+            {
+                // Open document 
+                string filename = dlg.FileName;
+                textBoxSourceVideo.Text = filename;
+            }
+        }
+
+        private void chooseSourceMessage(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.FileName = "Message"; // Default file name
+            dlg.DefaultExt = ".txt"; // Default file extension
+            dlg.Filter = "Documents|*.*"; // Filter files by extension 
+
+            // Show open file dialog box
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Process open file dialog box results 
+            if (result == true)
+            {
+                // Open document 
+                string filename = dlg.FileName;
+                textBoxSourceMessage.Text = filename;
+            }
         }
     }
 }

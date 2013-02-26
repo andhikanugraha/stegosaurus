@@ -6,7 +6,7 @@
         <TextBox Height="24" HorizontalAlignment="Left" Margin="12,32,0,0" Name="textBoxSourceVideo" VerticalAlignment="Top" Width="119" MaxLength="25" VerticalContentAlignment="Center" />
         <TextBlock Height="23" HorizontalAlignment="Left" Margin="12,12,0,0" Name="textBlock2" Text="Berkas video:" VerticalAlignment="Top" />
         <MediaElement Height="450" HorizontalAlignment="Right" Margin="0,0,-12,0" Name="mediaElement1" VerticalAlignment="Top" Width="800" />
-        <Button Content="Buka..." Height="23" HorizontalAlignment="Left" Margin="137,33,0,0" Name="buttonOpenSourceVideo" VerticalAlignment="Top" Width="44" />
+        <Button Content="Buka..." Height="23" HorizontalAlignment="Left" Margin="137,33,0,0" Name="buttonOpenSourceVideo" VerticalAlignment="Top" Width="44" Click="chooseSourceVideo" />
         <TextBox Height="23" HorizontalAlignment="Left" Margin="12,111,0,0" MaxLength="25" Name="textBoxSourceMessage" VerticalAlignment="Top" Width="119" VerticalContentAlignment="Center" />
         <TextBlock Height="23" HorizontalAlignment="Left" Margin="12,91,0,0" Name="textBlock3" Text="Berkas pesan:" VerticalAlignment="Top" />
         <TextBox Height="24" HorizontalAlignment="Left" Margin="12,161,0,0" MaxLength="25" Name="textBoxKey" VerticalAlignment="Top" Width="169" VerticalContentAlignment="Center" />
@@ -14,7 +14,7 @@
         <RadioButton Content="1-bit" Height="16" HorizontalAlignment="Left" Margin="87,193,0,0" Name="radioButton1bit" VerticalAlignment="Top" IsChecked="True" />
         <RadioButton Content="2-bit" Height="16" HorizontalAlignment="Left" Margin="137,193,0,0" Name="radioButton2bit" VerticalAlignment="Top" DataContext="{Binding}" />
         <TextBlock HorizontalAlignment="Left" Margin="12,192,0,235" Name="textBlock1" Text="Ukuran LSB" />
-        <Button Content="Buka..." Height="23" HorizontalAlignment="Left" Margin="137,111,0,0" Name="buttonOpenSourceMessage" VerticalAlignment="Top" Width="44" />
+        <Button Content="Buka..." Height="23" HorizontalAlignment="Left" Margin="137,111,0,0" Name="buttonOpenSourceMessage" VerticalAlignment="Top" Width="44" Click="chooseSourceMessage" />
         <Button Content="Dekripsi &amp; Simpan" Height="23" HorizontalAlignment="Left" Margin="12,415,0,0" Name="buttonDecrypt" VerticalAlignment="Top" Width="169" />
         <Button Content="Enkripsi &amp; Simpan" Height="23" HorizontalAlignment="Left" Margin="12,386,0,0" Name="buttonEncrypt" VerticalAlignment="Top" Width="169" />
         <Button Content="Load Video" Height="23" HorizontalAlignment="Left" Margin="12,62,0,0" Name="buttonLoadVideo" VerticalAlignment="Top" Width="119" />
