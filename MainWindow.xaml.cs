@@ -23,15 +23,5 @@ namespace WpfApplication1
         {
             InitializeComponent();
         }
-
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void textBox1_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
     }
 }
