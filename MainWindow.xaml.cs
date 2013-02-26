@@ -64,5 +64,11 @@ namespace WpfApplication1
                 textBoxSourceMessage.Text = filename;
             }
         }
+
+        private void loadSourceVideo(object sender, RoutedEventArgs e)
+        {
+            videoPlayer.Source = new Uri(textBoxSourceVideo.Text);
+            // videoPlayer.Play();
+        }
     }
 }

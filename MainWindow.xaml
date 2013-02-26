@@ -5,7 +5,7 @@
     <Grid Height="450">
         <TextBox Height="24" HorizontalAlignment="Left" Margin="12,32,0,0" Name="textBoxSourceVideo" VerticalAlignment="Top" Width="119" MaxLength="25" VerticalContentAlignment="Center" />
         <TextBlock Height="23" HorizontalAlignment="Left" Margin="12,12,0,0" Name="textBlock2" Text="Berkas video:" VerticalAlignment="Top" />
-        <MediaElement Height="450" HorizontalAlignment="Right" Margin="0,0,-12,0" Name="mediaElement1" VerticalAlignment="Top" Width="800" />
+        <MediaElement Height="450" HorizontalAlignment="Right" Margin="0,0,-12,0" Name="videoPlayer" VerticalAlignment="Top" Width="800" />
         <Button Content="Buka..." Height="23" HorizontalAlignment="Left" Margin="137,33,0,0" Name="buttonOpenSourceVideo" VerticalAlignment="Top" Width="44" Click="chooseSourceVideo" />
         <TextBox Height="23" HorizontalAlignment="Left" Margin="12,111,0,0" MaxLength="25" Name="textBoxSourceMessage" VerticalAlignment="Top" Width="119" VerticalContentAlignment="Center" />
         <TextBlock Height="23" HorizontalAlignment="Left" Margin="12,91,0,0" Name="textBlock3" Text="Berkas pesan:" VerticalAlignment="Top" />
@@ -17,7 +17,7 @@
         <Button Content="Buka..." Height="23" HorizontalAlignment="Left" Margin="137,111,0,0" Name="buttonOpenSourceMessage" VerticalAlignment="Top" Width="44" Click="chooseSourceMessage" />
         <Button Content="Dekripsi &amp; Simpan" Height="23" HorizontalAlignment="Left" Margin="12,415,0,0" Name="buttonDecrypt" VerticalAlignment="Top" Width="169" />
         <Button Content="Enkripsi &amp; Simpan" Height="23" HorizontalAlignment="Left" Margin="12,386,0,0" Name="buttonEncrypt" VerticalAlignment="Top" Width="169" />
-        <Button Content="Load Video" Height="23" HorizontalAlignment="Left" Margin="12,62,0,0" Name="buttonLoadVideo" VerticalAlignment="Top" Width="119" />
+        <Button Content="Load Video" Height="23" Margin="12,62,0,0" Name="buttonLoadVideo" VerticalAlignment="Top" Click="loadSourceVideo" HorizontalAlignment="Left" Width="119" />
         <Button Content="Play" Height="23" HorizontalAlignment="Left" Margin="137,62,0,0" Name="buttonPlay" VerticalAlignment="Top" Width="44" />
     </Grid>
 </Window>
