@@ -13,6 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
 using System.Diagnostics;
+using System.IO;
 
 namespace WpfApplication1
 {
@@ -69,6 +70,16 @@ namespace WpfApplication1
         {
             videoPlayer.Source = new Uri(textBoxSourceVideo.Text);
             // videoPlayer.Play();
+        }
+
+        private void onClickButtonEncrypt(object sender, RoutedEventArgs e)
+        {
+            String sourceFileName = textBoxSourceMessage.Text;
+            
+            /**
+             * 1. Feed the Vigenere engine with the filename
+             * 2. Vigenere engine will 
+             */
         }
     }
 }
