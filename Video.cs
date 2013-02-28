@@ -19,14 +19,29 @@ namespace Stegosaurus
         private AVIWriter writer;
         private int CurrentLength;
 
+        public Video(String input)
+        {
+            reader = new AVIReader();
+
+            reader.Open(input);
+            ResetReadByte();
+
+            Bitmap bitmap = reader.GetNextFrame();
+            //extract header
+        }
+
         public Video(String input, String output, int length, int extension, int bytePerFrame, int LSB)
         {
             reader = new AVIReader();
             writer = new AVIWriter();
 
             reader.Open(input);
+            writer.Open(output, reader.Width, reader.Height);
+            ResetWriteByte();
 
             Bitmap bitmap = reader.GetNextFrame();
+            //hide header
+            writer.AddFrame(bitmap);
         }
 
         public void InsertToFrame(byte[] insertedByte)
@@ -140,7 +155,23 @@ namespace Stegosaurus
             CurrentLength = 0;
         }
 
-        public void InsertRemaining()
+        public void ResetWriteByte()
+        {
+            reader.Position = reader.Start;
+        }
+
+        public void CloseReader()
+        {
+            reader.Close();
+        }
+
+        public void CloseWriter()
+        {
+            InsertRemaining();
+            writer.Close();
+        }
+
+        private void InsertRemaining()
         {
             while (true)
             {
@@ -166,8 +197,6 @@ namespace Stegosaurus
                 {
                     temp = (byte) (x + 1);
                 }
-                //dioperasikan OR untuk menjadikan 1
-                //temp = (byte)((1 << j * 3) | x);
             }
             else
             {
@@ -175,8 +204,6 @@ namespace Stegosaurus
                 {
                     temp = (byte)(x - 1);
                 }
-                //dioperasikan AND untuk menjadikan 0
-                //temp = (byte)(((1 << 7) - 1 - (1 << j * 3)) & x);
             }
             return temp;
         }
