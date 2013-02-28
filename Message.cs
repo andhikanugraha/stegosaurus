@@ -12,9 +12,15 @@ namespace Stegosaurus
         public String fileName;
         public FileStream stream;
 
+        public Message(String fn)
+        {
+            OpenFileRead(fn);
+        }
+
         // Returns true if success
         public bool OpenFileRead(String fn)
         {
+            fileName = fn;
             try
             {
                 stream = File.OpenRead(fn);
@@ -46,11 +52,37 @@ namespace Stegosaurus
         public byte[] ReadEncryptedBytes(Int32 offset, Int32 count)
         {
             byte[] originalBytes = new byte[count];
-            stream.Read(originalBytes, offset, count);
+
+            try
+            {
+                stream.Read(originalBytes, offset, count);
+            }
+            catch (IOException e)
+            {
+                Debug.WriteLine(e);
+                return null;
+            }
 
             byte[] encryptedBytes = Vigenere.EncryptBuffer(originalBytes);
 
             return encryptedBytes;
+        }
+
+        public bool WriteDecryptedBytes(byte[] encryptedBytes)
+        {
+            byte[] decryptedBytes = Vigenere.DecryptBuffer(encryptedBytes);
+
+            try
+            {
+                stream.Write(decryptedBytes, 0, decryptedBytes.Length);
+            }
+            catch (IOException e)
+            {
+                Debug.WriteLine(e);
+                return false;
+            }
+
+            return true;
         }
     }
 }
