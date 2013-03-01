@@ -14,6 +14,7 @@ namespace Stegosaurus
         public static string OutputMessageFileName { get; set; }
         public static string OutputVideoFileName { get; set; }
         public static string Key { get; set; }
+        public static double PNSR { get; set; }
         public static int LsbMode { get; set; }
 
         // TODO
@@ -54,6 +55,8 @@ namespace Stegosaurus
                 bytes[i] = (byte)messageInput.ReadByte();
             }
             video.InsertToFrame(bytes);
+
+            PNSR = video.PNSR;
 
             video.CloseWriter();
             messageInput.Close();

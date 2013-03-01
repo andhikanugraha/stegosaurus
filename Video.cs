@@ -15,6 +15,7 @@ namespace Stegosaurus
         public String Extension { get; private set; }
         public int LSB { get; private set; }
         public int Password { get; private set; }
+        public double PNSR { get; private set; }
 
         private AVIReader reader;
         private AVIWriter writer;
@@ -22,6 +23,8 @@ namespace Stegosaurus
         private int CurrentLength;
         private int RandCounter;
         private int Dimension;
+        private int SumPNSR;
+        private int SumPNSRFrame;
 
         private static int BytePerFrame = 1024;
         private static String HeaderFile = "header.txt";
@@ -44,6 +47,9 @@ namespace Stegosaurus
             Extension = extension;
             this.LSB = LSB;
             Password = ToPasswordSeed(password);
+            SumPNSRFrame = 0;
+            SumPNSR = 0;
+            PNSR = 0;
 
             reader = new AVIReader();
             writer = new AVIWriter();
@@ -109,11 +115,15 @@ namespace Stegosaurus
                             b = (byte)ToByte(b, byteAtPos, 2);
                         }
                     }
-
+                    SumPNSR += ((bitmap.GetPixel(x,y).R - r) *(bitmap.GetPixel(x,y).R - r) ) +
+                        ((bitmap.GetPixel(x,y).G - g) * (bitmap.GetPixel(x,y).G - g)) +
+                        ((bitmap.GetPixel(x, y).B - b) * (bitmap.GetPixel(x, y).B - b));
+                    SumPNSRFrame++;
                     bitmap.SetPixel(x, y, Color.FromArgb(r, g, b));
                     pos = RandIndex();
                 }
             }
+            PNSR = (double) SumPNSR / SumPNSRFrame;
             writer.AddFrame(bitmap);
         }
 
