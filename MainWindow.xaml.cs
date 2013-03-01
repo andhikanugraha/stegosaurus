@@ -110,21 +110,33 @@ namespace WpfApplication1
             }
             else
             {
-                // Everything valid here. Begin with encryption.
+                var dlg = new SaveFileDialog();
+                dlg.FileName = "Video"; // Default file name
+                dlg.DefaultExt = ".avi"; // Default file extension
+                dlg.Filter = "AVI Videos|*.avi"; // Filter files by extension 
+                dlg.Title = "Select Output Video File";
 
-                // Fill Engine with variables.
-                Stegosaurus.Engine.SourceMessageFileName = sourceMessageFileName;
-                Stegosaurus.Engine.SourceVideoFileName = sourceVideoFileName;
-                Stegosaurus.Engine.Key = key;
-                Stegosaurus.Engine.LsbMode = LSB;
+                Nullable<bool> result = dlg.ShowDialog();
 
-                Stegosaurus.Engine.EncryptAndSave();
+                if (result == true)
+                {
+                    // Everything valid here. Begin with encryption.
+
+                    // Fill Engine with variables.
+                    Stegosaurus.Engine.SourceMessageFileName = sourceMessageFileName;
+                    Stegosaurus.Engine.SourceVideoFileName = sourceVideoFileName;
+                    Stegosaurus.Engine.Key = key;
+                    Stegosaurus.Engine.LsbMode = LSB;
+
+                    Stegosaurus.Engine.OutputVideoFileName = dlg.FileName;
+
+                    Stegosaurus.Engine.EncryptAndSave();
+                }
+                else
+                {
+                    alert("Output file not specified. Abort operation.");
+                }
             }
-            
-            /**
-             * 1. Feed the Vigenere engine with the filename
-             * 2. Vigenere engine will 
-             */
         }
     }
 }
