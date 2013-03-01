@@ -17,7 +17,7 @@ namespace Stegosaurus
         public static int LsbMode { get; set; }
 
         // TODO
-        public static int BytePerFrame = 4096;
+        public static int BytePerFrame = 1024;
 
         // Precondition: all relevant properties have proper values.
         public static void EncryptAndSave()
@@ -30,20 +30,29 @@ namespace Stegosaurus
 
             Video video = new Video(SourceVideoFileName, OutputVideoFileName, len, ".pdf", LsbMode, Key);
             video.ResetWriteByte();
+
+            Console.WriteLine(len);
             
             while ((len - it) > BytePerFrame)
             {
                 bytes = new byte[BytePerFrame];
-                messageInput.Read(bytes, it, BytePerFrame);
+                for (int i = 0; i < BytePerFrame; i++)
+                {
+                    bytes[i] = (byte) messageInput.ReadByte();
+                }
 
                 // encrypt bytes
 
                 video.InsertToFrame(bytes);
                 it += BytePerFrame;
+                Console.WriteLine("it={0}",it);
             }
 
             bytes = new byte[len - it];
-            messageInput.Read(bytes, it, len - it);
+            for (int i = 0; i < len - it; i++)
+            {
+                bytes[i] = (byte)messageInput.ReadByte();
+            }
             video.InsertToFrame(bytes);
 
             video.CloseWriter();

@@ -21,8 +21,9 @@ namespace Stegosaurus
         private bool[] RandUsed;
         private int CurrentLength;
         private int RandCounter;
+        private int Dimension;
 
-        private static int BytePerFrame = 4096;
+        private static int BytePerFrame = 1024;
         private static String HeaderFile = "header.txt";
 
         public Video(String input, String password)
@@ -57,14 +58,17 @@ namespace Stegosaurus
         public void InsertToFrame(byte[] insertedByte)
         {
             Bitmap bitmap = reader.GetNextFrame();
+            Dimension = bitmap.Height * bitmap.Width;
             ResetRandIndex();
+            //Console.WriteLine("ib={0}",insertedByte.Length);
             int pos = RandIndex();
             for (int i = 0; i < (insertedByte.Length); i++)
             {
+                //Console.WriteLine("i={0}",i);
                 for (int j = 0; j < 3; j++)
                 {
-                    int x = pos / bitmap.Size.Width;
-                    int y = pos % bitmap.Size.Width;
+                    int y = pos / bitmap.Size.Width;
+                    int x = pos % bitmap.Size.Width;
 
                     byte r = bitmap.GetPixel(x, y).R;
                     byte g = bitmap.GetPixel(x, y).G;
@@ -116,6 +120,7 @@ namespace Stegosaurus
         public byte[] GetByteFromNextFrame()
         {
             Bitmap bitmap = reader.GetNextFrame();
+            Dimension = bitmap.Height * bitmap.Width;
             int remaining = ((Length - CurrentLength) >  BytePerFrame) ? BytePerFrame : (Length - CurrentLength);
             if (remaining < 0)
             {
@@ -130,8 +135,8 @@ namespace Stegosaurus
                 byte nowByte = 0;
                 for (int j = 0; j < 3; j++)
                 {
-                    int x = pos / bitmap.Size.Width;
-                    int y = pos % bitmap.Size.Width;
+                    int y = pos / bitmap.Size.Width;
+                    int x = pos % bitmap.Size.Width;
 
                     byte r = bitmap.GetPixel(x, y).R;
                     byte g = bitmap.GetPixel(x, y).G;
@@ -176,6 +181,7 @@ namespace Stegosaurus
         private void ExtractHeader()
         {
             Bitmap bitmap = reader.GetNextFrame();
+            Dimension = bitmap.Height * bitmap.Width;
             ResetRandIndex();
             int pos = RandIndex();
             int len = 0;
@@ -186,8 +192,8 @@ namespace Stegosaurus
                 int nowByte = 0;
                 for (int j = 0; j < 3; j++)
                 {
-                    int x = pos / bitmap.Size.Width;
-                    int y = pos % bitmap.Size.Width;
+                    int y = pos / bitmap.Size.Width;
+                    int x = pos % bitmap.Size.Width;
 
                     byte r = bitmap.GetPixel(x, y).R;
                     byte g = bitmap.GetPixel(x, y).G;
@@ -232,8 +238,8 @@ namespace Stegosaurus
                 byte nowByte = 0;
                 for (int j = 0; j < 3; j++)
                 {
-                    int x = pos / bitmap.Size.Width;
-                    int y = pos % bitmap.Size.Width;
+                    int y = pos / bitmap.Size.Width;
+                    int x = pos % bitmap.Size.Width;
 
                     byte r = bitmap.GetPixel(x, y).R;
                     byte g = bitmap.GetPixel(x, y).G;
@@ -349,8 +355,8 @@ namespace Stegosaurus
         private void ResetRandIndex()
         {
             RandCounter = 0;
-            RandUsed = new bool[8192];
-            for (int i = 0; i < 8192; i++)
+            RandUsed = new bool[Dimension];
+            for (int i = 0; i < Dimension; i++)
 			{
                 RandUsed[i] = false;
 			}
@@ -358,10 +364,10 @@ namespace Stegosaurus
 
         private int RandIndex()
         {
-            int r = (++RandCounter * Password) % 4093;
+            int r = (++RandCounter * Password) % Dimension;
             while (RandUsed[r])
             {
-                r++;
+                r = (r + 1) % Dimension;
             }
             RandUsed[r] = true;
             return r;
