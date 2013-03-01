@@ -65,33 +65,37 @@ namespace Stegosaurus
 
                     if (LSB == 1)
                     {
-                        int byteAtPos = (insertedByte[i] / ( 1 << (j * 3) ) ) % 2;
-                        r = (byte) ToByte1(r, byteAtPos, j);
+                        int byteAtPos = (insertedByte[i] / (1 << (j * 3))) % 2;
+                        r = (byte)ToByte(r, byteAtPos, 1);
 
                         byteAtPos = (insertedByte[i] / (1 << (j * 3 + 1))) % 2;
-                        g = (byte)ToByte1(g, byteAtPos, j);
+                        g = (byte)ToByte(g, byteAtPos, 1);
 
                         if (j < 2)
                         {
                             byteAtPos = (insertedByte[i] / (1 << (j * 3 + 2))) % 2;
-                            b = (byte)ToByte1(b, byteAtPos, j);
+                            b = (byte)ToByte(b, byteAtPos, 1);
                         }
                     }
-                    else if(LSB == 2)
+                    else if (LSB == 2)
                     {
-                        int byteAtPos = ((insertedByte[i] / ( 1 << (j * 3) ) ) % 2) * 2 +
-                            ((insertedByte[i] / ( 1 << (j * 3 + 1) ) ) % 2);
-                        r = (byte) ToByte1(r, byteAtPos, j);
-
-                        if(j == 0)
+                        int byteAtPos;
+                        if (j < 2)
                         {
-                            byteAtPos = ((insertedByte[i] / ( 1 << (j * 3 + 2) ) ) % 2) * 2 +
-                                ((insertedByte[i] / ( 1 << (j * 3 + 3) ) ) % 2);
-                            r = (byte) ToByte1(r, byteAtPos, j);
+                            byteAtPos = ((insertedByte[i] / (1 << (j * 6 + 1))) % 2) * 2 +
+                                ((insertedByte[i] / (1 << (j * 6))) % 2);
+                            r = (byte)ToByte(r, byteAtPos, 2);
+                        }
 
-                            byteAtPos = ((insertedByte[i] / ( 1 << (j * 3 + 4) ) ) % 2) * 2 +
-                                ((insertedByte[i] / ( 1 << (j * 3 + 5) ) ) % 2);
-                            r = (byte) ToByte1(r, byteAtPos, j);
+                        if (j == 0)
+                        {
+                            byteAtPos = ((insertedByte[i] / (1 << (j * 6 + 3))) % 2) * 2 +
+                                ((insertedByte[i] / (1 << (j * 6 + 2))) % 2);
+                            g = (byte)ToByte(g, byteAtPos, 2);
+
+                            byteAtPos = ((insertedByte[i] / (1 << (j * 6 + 5))) % 2) * 2 +
+                                ((insertedByte[i] / (1 << (j * 6 + 4))) % 2);
+                            b = (byte)ToByte(b, byteAtPos, 2);
                         }
                     }
 
@@ -123,26 +127,29 @@ namespace Stegosaurus
 
                     if (LSB == 1)
                     {
-                        nowByte += (byte) ((1 << (j * 3)) & r);
-                        nowByte += (byte) ((1 << (j * 3 + 1)) & g);
+                        nowByte += (byte)((r % 2) * (1 << (j * 3)));
+                        nowByte += (byte)((g % 2) * (1 << (j * 3 + 1)));
                         if (j < 2)
                         {
-                            nowByte += (byte) ((1 << (j * 3 + 2)) & b);
+                            nowByte += (byte)((b % 2) * (1 << (j * 3 + 2)));
                         }
                     }
-                    else if(LSB == 2)
+                    else if (LSB == 2)
                     {
-                        nowByte += (byte)((1 << (j * 3)) & r);
-                        nowByte += (byte)((1 << (j * 3 + 1)) & r);
                         if (j < 2)
                         {
-                            nowByte += (byte)((1 << (j * 3 + 2)) & g);
-                            nowByte += (byte)((1 << (j * 3 + 3)) & g);
+                            nowByte += (byte)((r % 2) * (1 << (j * 6)));
+                            nowByte += (byte)(((r / 2) % 2) * (1 << (j * 6 + 1)));
                         }
-                        if (j < 2)
+                        if (j < 1)
                         {
-                            nowByte += (byte)((1 << (j * 3 + 4)) & b);
-                            nowByte += (byte)((1 << (j * 3 + 5)) & b);
+                            nowByte += (byte)((g % 2) * (1 << (j * 6 + 2)));
+                            nowByte += (byte)(((g / 2) % 2) * (1 << (j * 6 + 3)));
+                        }
+                        if (j < 1)
+                        {
+                            nowByte += (byte)((b % 2) * (1 << (j * 6 + 4)));
+                            nowByte += (byte)(((b / 2) % 2) * (1 << (j * 6 + 5)));
                         }
                     }
 
@@ -175,26 +182,29 @@ namespace Stegosaurus
 
                     if (LSB == 1)
                     {
-                        nowByte += ((1 << (j * 3)) & r);
-                        nowByte += ((1 << (j * 3 + 1)) & g);
+                        nowByte += (byte)((r % 2) * (1 << (j * 3)));
+                        nowByte += (byte)((g % 2) * (1 << (j * 3 + 1)));
                         if (j < 2)
                         {
-                            nowByte += ((1 << (j * 3 + 2)) & b);
+                            nowByte += (byte)((b % 2) * (1 << (j * 3 + 2)));
                         }
                     }
                     else if (LSB == 2)
                     {
-                        nowByte += ((1 << (j * 3)) & r);
-                        nowByte += ((1 << (j * 3 + 1)) & r);
                         if (j < 2)
                         {
-                            nowByte += ((1 << (j * 3 + 2)) & g);
-                            nowByte += ((1 << (j * 3 + 3)) & g);
+                            nowByte += (byte)((r % 2) * (1 << (j * 6)));
+                            nowByte += (byte)(((r / 2) % 2) * (1 << (j * 6 + 1)));
                         }
-                        if (j < 2)
+                        if (j < 1)
                         {
-                            nowByte += ((1 << (j * 3 + 4)) & b);
-                            nowByte += ((1 << (j * 3 + 5)) & b);
+                            nowByte += (byte)((g % 2) * (1 << (j * 6 + 2)));
+                            nowByte += (byte)(((g / 2) % 2) * (1 << (j * 6 + 3)));
+                        }
+                        if (j < 1)
+                        {
+                            nowByte += (byte)((b % 2) * (1 << (j * 6 + 4)));
+                            nowByte += (byte)(((b / 2) % 2) * (1 << (j * 6 + 5)));
                         }
                     }
                     pos++;
@@ -218,29 +228,31 @@ namespace Stegosaurus
 
                     if (LSB == 1)
                     {
-                        nowByte += (byte)((1 << (j * 3)) & r);
-                        nowByte += (byte)((1 << (j * 3 + 1)) & g);
+                        nowByte += (byte)((r % 2) * (1 << (j * 3)));
+                        nowByte += (byte)((g % 2) * (1 << (j * 3 + 1)));
                         if (j < 2)
                         {
-                            nowByte += (byte)((1 << (j * 3 + 2)) & b);
+                            nowByte += (byte)((b % 2) * (1 << (j * 3 + 2)));
                         }
                     }
                     else if (LSB == 2)
                     {
-                        nowByte += (byte)((1 << (j * 3)) & r);
-                        nowByte += (byte)((1 << (j * 3 + 1)) & r);
                         if (j < 2)
                         {
-                            nowByte += (byte)((1 << (j * 3 + 2)) & g);
-                            nowByte += (byte)((1 << (j * 3 + 3)) & g);
+                            nowByte += (byte)((r % 2) * (1 << (j * 6)));
+                            nowByte += (byte)(((r / 2) % 2) * (1 << (j * 6 + 1)));
                         }
-                        if (j < 2)
+                        if (j < 1)
                         {
-                            nowByte += (byte)((1 << (j * 3 + 4)) & b);
-                            nowByte += (byte)((1 << (j * 3 + 5)) & b);
+                            nowByte += (byte)((g % 2) * (1 << (j * 6 + 2)));
+                            nowByte += (byte)(((g / 2) % 2) * (1 << (j * 6 + 3)));
+                        }
+                        if (j < 1)
+                        {
+                            nowByte += (byte)((b % 2) * (1 << (j * 6 + 4)));
+                            nowByte += (byte)(((b / 2) % 2) * (1 << (j * 6 + 5)));
                         }
                     }
-
                     pos++;
                 }
                 ret[i] = nowByte;
@@ -330,29 +342,11 @@ namespace Stegosaurus
             }
         }
 
-        private int ToByte1(byte x, int byteAtPos, int j)
+        private int ToByte(byte x, int byteAtPos, int len)
         {
-            byte temp = x;
-            if (byteAtPos == 1)
-            {
-                if (x % 2 == 0)
-                {
-                    temp = (byte) (x + 1);
-                }
-            }
-            else
-            {
-                if (x % 2 == 1)
-                {
-                    temp = (byte)(x - 1);
-                }
-            }
-            return temp;
-        }
-
-        private int ToByte2(byte x, int byteAtPos, int j)
-        {
-            return 0;
+            x -= (byte)(x % (1 << len));
+            x += (byte)byteAtPos;
+            return x;
         }
     }
 }
