@@ -72,9 +72,46 @@ namespace WpfApplication1
             // videoPlayer.Play();
         }
 
+        private void alert(string message)
+        {
+            string messageBoxText = message;
+            string caption = "Stegosaurus";
+            MessageBoxButton button = MessageBoxButton.OK;
+            MessageBoxImage icon = MessageBoxImage.Error;
+            MessageBox.Show(messageBoxText, caption, button, icon);
+        }
+
         private void onClickButtonEncrypt(object sender, RoutedEventArgs e)
         {
-            String sourceFileName = textBoxSourceMessage.Text;
+            string sourceMessageFileName = textBoxSourceMessage.Text;
+            string sourceVideoFileName = textBoxSourceVideo.Text;
+            string key = textBoxKey.Text;
+            int LSB = Convert.ToBoolean(radioButton1bit.IsChecked) ? 1 : 2;
+
+            if (sourceMessageFileName.Length == 0) {
+                alert("Please specify a source message file.");
+            }
+            else if (sourceVideoFileName.Length == 0)
+            {
+                alert("Please specify a source video file.");
+            }
+            else if (key.Length == 0)
+            {
+                alert("Please specify a key.");
+            }
+            else if (!File.Exists(sourceMessageFileName))
+            {
+                alert("Source message file not found.");
+            }
+            else if (!File.Exists(sourceVideoFileName))
+            {
+                alert("Source video file not found.");
+            }
+            else
+            {
+                // Everything valid here. Begin with encryption.
+
+            }
             
             /**
              * 1. Feed the Vigenere engine with the filename
