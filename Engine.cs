@@ -6,7 +6,7 @@ using System.Text;
 namespace Stegosaurus
 {
     // Main application logic class. A singleton.
-    class Stegosaurus
+    class Engine
     {
         public static string SourceMessageFileName { get; set; }
         public static string SourceVideoFileName { get; set; }
