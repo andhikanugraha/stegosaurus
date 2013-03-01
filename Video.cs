@@ -13,7 +13,6 @@ namespace Stegosaurus
     {
         public int Length { get; private set; }
         public String Extension { get; private set; }
-        public int BytePerFrame { get; private set; }
         public int LSB { get; private set; }
         public int Password { get; private set; }
 
@@ -22,6 +21,8 @@ namespace Stegosaurus
         private bool[] RandUsed;
         private int CurrentLength;
         private int RandCounter;
+
+        private static int BytePerFrame = 4096;
         private static String HeaderFile = "header.txt";
 
         public Video(String input, String password)
@@ -36,11 +37,10 @@ namespace Stegosaurus
             ExtractHeader();
         }
 
-        public Video(String input, String output, int length, String extension, int bytePerFrame, int LSB, String password)
+        public Video(String input, String output, int length, String extension, int LSB, String password)
         {
             Length = length;
             Extension = extension;
-            BytePerFrame = bytePerFrame;
             this.LSB = LSB;
             Password = ToPasswordSeed(password);
 
@@ -117,6 +117,10 @@ namespace Stegosaurus
         {
             Bitmap bitmap = reader.GetNextFrame();
             int remaining = ((Length - CurrentLength) >  BytePerFrame) ? BytePerFrame : (Length - CurrentLength);
+            if (remaining < 0)
+            {
+                return null;
+            }
             byte[] ret = new byte[remaining];
 
             ResetRandIndex();
@@ -276,7 +280,6 @@ namespace Stegosaurus
             TextReader tr = new StreamReader(HeaderFile);
             Length = Convert.ToInt32(tr.ReadLine());
             Extension = tr.ReadLine();
-            BytePerFrame = Convert.ToInt32(tr.ReadLine());
             LSB = Convert.ToInt32(tr.ReadLine());
             tr.Close();
         }
@@ -287,7 +290,6 @@ namespace Stegosaurus
             TextWriter tw = new StreamWriter(HeaderFile);
             tw.WriteLine(Length);
             tw.WriteLine(Extension);
-            tw.WriteLine(BytePerFrame);
             tw.WriteLine(LSB);
             tw.Close();
 
