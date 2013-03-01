@@ -15,14 +15,19 @@ namespace Stegosaurus
         public String Extension { get; private set; }
         public int BytePerFrame { get; private set; }
         public int LSB { get; private set; }
+        public int Password { get; private set; }
 
         private AVIReader reader;
         private AVIWriter writer;
+        private bool[] RandUsed;
         private int CurrentLength;
+        private int RandCounter;
         private static String HeaderFile = "header.txt";
 
-        public Video(String input)
+        public Video(String input, String password)
         {
+            Password = ToPasswordSeed(password);
+
             reader = new AVIReader();
 
             reader.Open(input);
@@ -31,12 +36,13 @@ namespace Stegosaurus
             ExtractHeader();
         }
 
-        public Video(String input, String output, int length, String extension, int bytePerFrame, int LSB)
+        public Video(String input, String output, int length, String extension, int bytePerFrame, int LSB, String password)
         {
             Length = length;
             Extension = extension;
             BytePerFrame = bytePerFrame;
             this.LSB = LSB;
+            Password = ToPasswordSeed(password);
 
             reader = new AVIReader();
             writer = new AVIWriter();
@@ -51,7 +57,8 @@ namespace Stegosaurus
         public void InsertToFrame(byte[] insertedByte)
         {
             Bitmap bitmap = reader.GetNextFrame();
-            int pos = 0;
+            ResetRandIndex();
+            int pos = RandIndex();
             for (int i = 0; i < (insertedByte.Length); i++)
             {
                 for (int j = 0; j < 3; j++)
@@ -100,7 +107,7 @@ namespace Stegosaurus
                     }
 
                     bitmap.SetPixel(x, y, Color.FromArgb(r, g, b));
-                    pos++;
+                    pos = RandIndex();
                 }
             }
             writer.AddFrame(bitmap);
@@ -112,7 +119,8 @@ namespace Stegosaurus
             int remaining = ((Length - CurrentLength) >  BytePerFrame) ? BytePerFrame : (Length - CurrentLength);
             byte[] ret = new byte[remaining];
 
-            int pos = 0;
+            ResetRandIndex();
+            int pos = RandIndex();
             for (int i = 0; i < remaining; i++)
             {
                 byte nowByte = 0;
@@ -153,7 +161,7 @@ namespace Stegosaurus
                         }
                     }
 
-                    pos++;
+                    pos = RandIndex();
                 }
                 ret[i] = nowByte;
             }
@@ -164,7 +172,8 @@ namespace Stegosaurus
         private void ExtractHeader()
         {
             Bitmap bitmap = reader.GetNextFrame();
-            int pos = 0;
+            ResetRandIndex();
+            int pos = RandIndex();
             int len = 0;
 
             // getting length header
@@ -207,7 +216,7 @@ namespace Stegosaurus
                             nowByte += (byte)(((b / 2) % 2) * (1 << (j * 6 + 5)));
                         }
                     }
-                    pos++;
+                    pos = RandIndex();
                 }
                 len += nowByte;
             }
@@ -253,7 +262,7 @@ namespace Stegosaurus
                             nowByte += (byte)(((b / 2) % 2) * (1 << (j * 6 + 5)));
                         }
                     }
-                    pos++;
+                    pos = RandIndex();
                 }
                 ret[i] = nowByte;
             }
@@ -323,6 +332,37 @@ namespace Stegosaurus
         {
             InsertRemaining();
             writer.Close();
+        }
+
+        private int ToPasswordSeed(String password)
+        {
+            int ret = 0;
+            for (int i = 0; i < password.Length; i++)
+            {
+                ret += (int) password[i];
+            }
+            return ret;
+        }
+
+        private void ResetRandIndex()
+        {
+            RandCounter = 0;
+            RandUsed = new bool[8192];
+            for (int i = 0; i < 8192; i++)
+			{
+                RandUsed[i] = false;
+			}
+        }
+
+        private int RandIndex()
+        {
+            int r = (++RandCounter * Password) % 4093;
+            while (RandUsed[r])
+            {
+                r++;
+            }
+            RandUsed[r] = true;
+            return r;
         }
 
         private void InsertRemaining()
