@@ -14,7 +14,7 @@ using System.Windows.Shapes;
 using Microsoft.Win32;
 using System.Diagnostics;
 using System.IO;
-using Stegosaurus.Engine;
+using Stegosaurus;
 
 namespace WpfApplication1
 {
@@ -123,14 +123,14 @@ namespace WpfApplication1
                     // Everything valid here. Begin with encryption.
 
                     // Fill Engine with variables.
-                    Stegosaurus.Engine.SourceMessageFileName = sourceMessageFileName;
-                    Stegosaurus.Engine.SourceVideoFileName = sourceVideoFileName;
-                    Stegosaurus.Engine.Key = key;
-                    Stegosaurus.Engine.LsbMode = LSB;
+                    Engine.SourceMessageFileName = sourceMessageFileName;
+                    Engine.SourceVideoFileName = sourceVideoFileName;
+                    Engine.Key = key;
+                    Engine.LsbMode = LSB;
 
-                    Stegosaurus.Engine.OutputVideoFileName = dlg.FileName;
+                    Engine.OutputVideoFileName = dlg.FileName;
 
-                    Stegosaurus.Engine.EncryptAndSave();
+                    Engine.EncryptAndSave();
                 }
                 else
                 {
@@ -138,5 +138,56 @@ namespace WpfApplication1
                 }
             }
         }
+
+
+        private void onClickButtonDecrypt(object sender, RoutedEventArgs e)
+        {
+            string sourceMessageFileName = textBoxSourceMessage.Text;
+            string sourceVideoFileName = textBoxSourceVideo.Text;
+            string key = textBoxKey.Text;
+            int LSB = Convert.ToBoolean(radioButton1bit.IsChecked) ? 1 : 2;
+
+            if (sourceVideoFileName.Length == 0)
+            {
+                alert("Please specify a source video file.");
+            }
+            else if (key.Length == 0)
+            {
+                alert("Please specify a key.");
+            }
+            else if (!File.Exists(sourceVideoFileName))
+            {
+                alert("Source video file not found.");
+            }
+            else
+            {
+                var dlg = new SaveFileDialog();
+                dlg.FileName = sourceMessageFileName; // Default file name
+                dlg.DefaultExt = ".txt"; // Default file extension
+                dlg.Filter = "*.*"; // Filter files by extension 
+                dlg.Title = "Select Output Message File";
+
+                Nullable<bool> result = dlg.ShowDialog();
+
+                if (result == true)
+                {
+                    // Everything valid here. Begin with encryption.
+
+                    // Fill Engine with variables.
+                    Engine.SourceVideoFileName = sourceVideoFileName;
+                    Engine.Key = key;
+                    Engine.LsbMode = LSB;
+
+                    Engine.OutputMessageFileName = dlg.FileName;
+
+                    Engine.DecryptAndSave();
+                }
+                else
+                {
+                    alert("Output file not specified. Abort operation.");
+                }
+            }
+        }
+
     }
 }

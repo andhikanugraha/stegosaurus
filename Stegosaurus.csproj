@@ -75,6 +75,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Message.cs" />
+    <Compile Include="Engine.cs" />
     <Compile Include="Video.cs" />
     <Compile Include="Vigenere.cs" />
     <Page Include="MainWindow.xaml">

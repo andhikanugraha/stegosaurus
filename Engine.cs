@@ -21,7 +21,13 @@ namespace Stegosaurus
         // Precondition: all relevant properties have proper values.
         public static void EncryptAndSave()
         {
-            var videoHandler = new Video(SourceVideoFileName);
+            
+        }
+
+        // Precondition: all relevant properties have proper values.
+        public static void DecryptAndSave()
+        {
+
         }
     }
 }
