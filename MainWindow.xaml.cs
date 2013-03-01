@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using Microsoft.Win32;
 using System.Diagnostics;
 using System.IO;
+using Stegosaurus.Engine;
 
 namespace WpfApplication1
 {
@@ -111,6 +112,13 @@ namespace WpfApplication1
             {
                 // Everything valid here. Begin with encryption.
 
+                // Fill Engine with variables.
+                Stegosaurus.Engine.SourceMessageFileName = sourceMessageFileName;
+                Stegosaurus.Engine.SourceVideoFileName = sourceVideoFileName;
+                Stegosaurus.Engine.Key = key;
+                Stegosaurus.Engine.LsbMode = LSB;
+
+                Stegosaurus.Engine.EncryptAndSave();
             }
             
             /**
