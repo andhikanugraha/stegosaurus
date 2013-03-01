@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -40,6 +41,8 @@ namespace Stegosaurus
 
                 // The shifted byte
                 int e = b ^ shift;
+
+                // Debug.WriteLine(Convert.ToChar(b) + " -> " + Convert.ToChar(e) + " <- " + Convert.ToChar(shift));
 
                 // Convert to byte
                 byte bb = Convert.ToByte(e);

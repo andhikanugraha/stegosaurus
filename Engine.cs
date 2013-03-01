@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 
 namespace Stegosaurus
 {
@@ -54,6 +55,8 @@ namespace Stegosaurus
             {
                 bytes[i] = (byte)messageInput.ReadByte();
             }
+            // Vigenere
+            bytes = Vigenere.EncryptBuffer(bytes);
             video.InsertToFrame(bytes);
 
             PNSR = video.PNSR;
@@ -77,6 +80,7 @@ namespace Stegosaurus
             {
                 // decrypt bytes
 
+                bytes = Vigenere.DecryptBuffer(bytes);
                 for (int i = 0; i < bytes.Length; i++)
                 {
                     messageOutput.WriteByte(bytes[i]);

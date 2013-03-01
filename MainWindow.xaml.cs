@@ -127,10 +127,12 @@ namespace WpfApplication1
                     Engine.SourceVideoFileName = sourceVideoFileName;
                     Engine.Key = key;
                     Engine.LsbMode = LSB;
-
+                    Vigenere.LoadKey(key);
                     Engine.OutputVideoFileName = dlg.FileName;
 
+                    Vigenere.ResetPos();
                     Engine.EncryptAndSave();
+                    PSNRIndicator.Text = "PSNR: " + Convert.ToString(Engine.PNSR) + " dB";
                 }
                 else
                 {
@@ -164,7 +166,7 @@ namespace WpfApplication1
                 var dlg = new SaveFileDialog();
                 dlg.FileName = sourceMessageFileName; // Default file name
                 dlg.DefaultExt = ".txt"; // Default file extension
-                dlg.Filter = "*.*"; // Filter files by extension 
+                dlg.Filter = "All Files (*.*)|*.*"; // Filter files by extension 
                 dlg.Title = "Select Output Message File";
 
                 Nullable<bool> result = dlg.ShowDialog();
@@ -177,9 +179,10 @@ namespace WpfApplication1
                     Engine.SourceVideoFileName = sourceVideoFileName;
                     Engine.Key = key;
                     Engine.LsbMode = LSB;
+                    Vigenere.LoadKey(key);
 
                     Engine.OutputMessageFileName = dlg.FileName;
-
+                    Vigenere.ResetPos();
                     Engine.DecryptAndSave();
                 }
                 else
